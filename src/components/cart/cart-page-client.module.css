@@ -92,6 +92,20 @@
   font: inherit;
   color: #111111;
   cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.secondaryButton:hover,
+.removeButton:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 212, 0, 0.14);
+  color: #111111;
+  border-color: rgba(17, 17, 17, 0.08);
 }
 
 .list {
@@ -194,11 +208,27 @@
   border: 1px solid rgba(17, 17, 17, 0.08);
   background: #ffffff;
   cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
 }
 
 .couponCard span,
 .couponCard small {
   color: var(--muted);
+}
+
+.couponCard:hover {
+  transform: scale(1.02);
+  box-shadow: 0 16px 28px rgba(17, 17, 17, 0.12);
+  border-color: rgba(17, 17, 17, 0.16);
+}
+
+.couponCardActive {
+  transform: scale(1.02);
+  box-shadow: 0 16px 28px rgba(17, 17, 17, 0.12);
+  border-color: rgba(17, 17, 17, 0.18);
 }
 
 .summary {
@@ -228,6 +258,18 @@
   color: #ffffff;
   font: inherit;
   cursor: pointer;
+  transition:
+    color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  color: #ffd400;
+  transform: scale(1.02);
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.82),
+    0 16px 28px rgba(17, 17, 17, 0.14);
 }
 
 .submitButton:disabled {
@@ -243,6 +285,59 @@
   border-radius: 22px;
   background: #ffffff;
   border: 1px dashed rgba(17, 17, 17, 0.15);
+}
+
+.orderSummaryCard {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 0.4rem;
+  padding: 1rem;
+  border-radius: 18px;
+  background: #fff8cc;
+  border: 1px solid rgba(17, 17, 17, 0.1);
+}
+
+.orderSummaryHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.orderSummaryHeader h3 {
+  margin: 0;
+}
+
+.pendingBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: #111111;
+  color: #ffffff;
+  font-size: 0.82rem;
+}
+
+.orderSummaryGrid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.orderSummaryGrid div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.orderSummaryGrid span {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.orderSummaryGrid strong {
+  color: #111111;
 }
 
 .error,
@@ -349,6 +444,15 @@
   .secondaryButton,
   .removeButton {
     color: #111111;
+  }
+
+  .orderSummaryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .orderSummaryGrid {
+    grid-template-columns: 1fr;
   }
 
   .dialogActions {

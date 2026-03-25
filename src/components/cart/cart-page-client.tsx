@@ -16,6 +16,13 @@ type Props = {
   coupons: Coupon[];
 };
 
+type LastSubmittedOrder = {
+  orderId: string;
+  itemsCount: number;
+  total: number;
+  status: "Pending";
+};
+
 export function CartPageClient({ coupons }: Props) {
   const {
     items,
@@ -35,6 +42,8 @@ export function CartPageClient({ coupons }: Props) {
   const [success, setSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showClearCartDialog, setShowClearCartDialog] = useState(false);
+  const [lastSubmittedOrder, setLastSubmittedOrder] =
+    useState<LastSubmittedOrder | null>(null);
 
   const subtotal = Number(
     items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2),
@@ -51,6 +60,23 @@ export function CartPageClient({ coupons }: Props) {
       clearCoupon();
     }
   }, [appliedCoupon, clearCoupon, hydrated, subtotal]);
+
+  useEffect(() => {
+    if (!hydrated || typeof window === "undefined") {
+      return;
+    }
+
+    const savedOrder = window.localStorage.getItem("foodapp:last-order");
+    if (!savedOrder) {
+      return;
+    }
+
+    try {
+      setLastSubmittedOrder(JSON.parse(savedOrder) as LastSubmittedOrder);
+    } catch {
+      window.localStorage.removeItem("foodapp:last-order");
+    }
+  }, [hydrated]);
 
   const handleCouponApply = (code: string) => {
     const coupon = coupons.find(
@@ -129,6 +155,21 @@ export function CartPageClient({ coupons }: Props) {
         throw new Error(result.error ?? "Order could not be created.");
       }
 
+      const submittedOrder: LastSubmittedOrder = {
+        orderId: result.orderId ?? "Unknown",
+        itemsCount: items.reduce((sum, item) => sum + item.quantity, 0),
+        total,
+        status: "Pending",
+      };
+
+      setLastSubmittedOrder(submittedOrder);
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(
+          "foodapp:last-order",
+          JSON.stringify(submittedOrder),
+        );
+      }
+
       clearCart();
       setCouponInput("");
       setEmail("");
@@ -194,6 +235,30 @@ export function CartPageClient({ coupons }: Props) {
                 <Link href="/" className={styles.primaryLink}>
                   Go back to shops
                 </Link>
+                {lastSubmittedOrder ? (
+                  <div className={styles.orderSummaryCard}>
+                    <div className={styles.orderSummaryHeader}>
+                      <h3>Latest order</h3>
+                      <span className={styles.pendingBadge}>
+                        {lastSubmittedOrder.status}
+                      </span>
+                    </div>
+                    <div className={styles.orderSummaryGrid}>
+                      <div>
+                        <span>Order ID</span>
+                        <strong>{lastSubmittedOrder.orderId}</strong>
+                      </div>
+                      <div>
+                        <span>Products</span>
+                        <strong>{lastSubmittedOrder.itemsCount}</strong>
+                      </div>
+                      <div>
+                        <span>Total</span>
+                        <strong>{formatCurrency(lastSubmittedOrder.total)}</strong>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             ) : (
               <div className={styles.list}>
@@ -314,7 +379,11 @@ export function CartPageClient({ coupons }: Props) {
                   <button
                     key={coupon.id}
                     type="button"
-                    className={styles.couponCard}
+                    className={`${styles.couponCard} ${
+                      appliedCoupon?.code === coupon.code
+                        ? styles.couponCardActive
+                        : ""
+                    }`}
                     onClick={() => handleCouponApply(coupon.code)}
                   >
                     <strong>{coupon.code}</strong>
