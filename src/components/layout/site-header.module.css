@@ -103,6 +103,12 @@
 }
 
 @media (max-width: 720px) {
+  .header {
+    position: static;
+    top: auto;
+    backdrop-filter: none;
+  }
+
   .inner {
     width: min(100% - 1.25rem, 1180px);
     padding: 0.9rem 0;

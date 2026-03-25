@@ -115,14 +115,23 @@ export function ShopPageClient({ initialData }: Props) {
     setSelectedCategoryIds([]);
     setPage(1);
 
-    window.setTimeout(() => {
-      if (window.innerWidth <= 1080) {
-        productsSectionRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-    }, 80);
+    if (window.innerWidth <= 720) {
+      window.requestAnimationFrame(() => {
+        window.setTimeout(() => {
+          const section = productsSectionRef.current;
+
+          if (!section) {
+            return;
+          }
+
+          const targetTop = section.getBoundingClientRect().top + window.scrollY - 12;
+          window.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior: "smooth",
+          });
+        }, 160);
+      });
+    }
   };
 
   const handleAddProduct = (product: CatalogResponse["products"][number]) => {

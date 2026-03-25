@@ -284,4 +284,9 @@
   .couponRow {
     grid-template-columns: 1fr;
   }
+
+  .couponCard,
+  .couponCard strong {
+    color: #111111;
+  }
 }
