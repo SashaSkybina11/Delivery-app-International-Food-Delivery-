@@ -34,6 +34,7 @@ export function CartPageClient({ coupons }: Props) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showClearCartDialog, setShowClearCartDialog] = useState(false);
 
   const subtotal = Number(
     items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2),
@@ -180,7 +181,7 @@ export function CartPageClient({ coupons }: Props) {
                 <button
                   type="button"
                   className={styles.secondaryButton}
-                  onClick={clearCart}
+                  onClick={() => setShowClearCartDialog(true)}
                 >
                   Clear cart
                 </button>
@@ -362,6 +363,46 @@ export function CartPageClient({ coupons }: Props) {
           </form>
         </div>
       </section>
+      {showClearCartDialog ? (
+        <div
+          className={styles.dialogBackdrop}
+          role="presentation"
+          onClick={() => setShowClearCartDialog(false)}
+        >
+          <div
+            className={styles.dialog}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="clear-cart-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3 id="clear-cart-title">Clear all items?</h3>
+            <p>
+              Are you sure you want to remove all products from your shopping
+              cart?
+            </p>
+            <div className={styles.dialogActions}>
+              <button
+                type="button"
+                className={styles.cancelButton}
+                onClick={() => setShowClearCartDialog(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className={styles.confirmButton}
+                onClick={() => {
+                  clearCart();
+                  setShowClearCartDialog(false);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

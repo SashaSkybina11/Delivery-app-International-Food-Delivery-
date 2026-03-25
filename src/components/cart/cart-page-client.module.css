@@ -90,6 +90,7 @@
   background: #ffffff;
   padding: 0.7rem 0.9rem;
   font: inherit;
+  color: #111111;
   cursor: pointer;
 }
 
@@ -250,6 +251,64 @@
   margin: 0.9rem 0 0;
 }
 
+.dialogBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(17, 17, 17, 0.52);
+}
+
+.dialog {
+  width: min(420px, 100%);
+  padding: 1.25rem;
+  border-radius: 24px;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  background: #ffffff;
+  color: #111111;
+  box-shadow: 0 24px 48px rgba(17, 17, 17, 0.18);
+}
+
+.dialog h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.dialog p {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+}
+
+.cancelButton,
+.confirmButton {
+  min-width: 112px;
+  border-radius: 14px;
+  padding: 0.78rem 1rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.cancelButton {
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  background: #ffffff;
+  color: #111111;
+}
+
+.confirmButton {
+  border: 1px solid #c73737;
+  background: #d94141;
+  color: #ffffff;
+}
+
 .error {
   color: #8b2d2d;
 }
@@ -286,7 +345,18 @@
   }
 
   .couponCard,
-  .couponCard strong {
+  .couponCard strong,
+  .secondaryButton,
+  .removeButton {
     color: #111111;
+  }
+
+  .dialogActions {
+    flex-direction: column-reverse;
+  }
+
+  .cancelButton,
+  .confirmButton {
+    width: 100%;
   }
 }
