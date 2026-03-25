@@ -1,0 +1,117 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.inner {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brandMark {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #545454 0%, #ffbf00 100%);
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.brandTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.brandSubtitle {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.72rem 0.95rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid transparent;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.link:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 212, 0, 0.14);
+  border-color: rgba(17, 17, 17, 0.08);
+}
+
+.linkActive {
+  background: #111111;
+  color: #ffffff;
+}
+
+.linkActive:hover {
+  background: #ffd400;
+  color: #111111;
+  border-color: rgba(17, 17, 17, 0.16);
+}
+
+.badge {
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.38rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #ffd400;
+  color: #111111;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .inner {
+    width: min(100% - 1.25rem, 1180px);
+    padding: 0.9rem 0;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
