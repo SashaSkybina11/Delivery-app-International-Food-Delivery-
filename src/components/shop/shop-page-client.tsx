@@ -147,7 +147,6 @@ export function ShopPageClient({ initialData }: Props) {
           <div className={styles.card}>
             <div className={styles.sectionHeading}>
               <h2>Shop rating</h2>
-              <p>Middle level feature</p>
             </div>
             <div className={styles.pillGroup}>
               {ratingOptions.map((option) => (

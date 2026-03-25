@@ -354,6 +354,10 @@
     border-radius: 22px;
   }
 
+  .pill {
+    color: #111111;
+  }
+
   .selectedShop {
     text-align: center;
     align-items: center;
