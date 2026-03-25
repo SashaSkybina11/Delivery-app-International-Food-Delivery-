@@ -28,7 +28,7 @@ const sortOptions: Array<{ value: ProductSort; label: string }> = [
   { value: "name-asc", label: "Name: A to Z" },
 ];
 
-const LOADER_DELAY_MS = 2000;
+const LOADER_DELAY_MS = 1400;
 
 export function ShopPageClient({ initialData }: Props) {
   const { addItem } = useCart();
@@ -209,78 +209,78 @@ export function ShopPageClient({ initialData }: Props) {
         </aside>
 
         <div className={styles.content}>
-          {loading ? (
-            <div className={styles.loaderStage}>
-              <FryingLoader />
-            </div>
-          ) : (
-            <>
-              {selectedShop ? (
-                <section
-                  className={styles.selectedShop}
-                  style={{ background: shopAccentStyle(selectedShop.accent) }}
+          {selectedShop ? (
+            <section
+              className={styles.selectedShop}
+              style={{ background: shopAccentStyle(selectedShop.accent) }}
+            >
+              <div>
+                <p className={styles.selectedLabel}>Selected shop</p>
+                <h2>
+                  <span className={styles.flag}>{selectedShop.flag}</span>{" "}
+                  {formatShopName(selectedShop.name)}
+                </h2>
+                <p className={styles.countryLabel}>{selectedShop.country}</p>
+                <p>{selectedShop.description}</p>
+              </div>
+              <div className={styles.selectedStats}>
+                <div>
+                  <span>Rating</span>
+                  <strong>{selectedShop.rating.toFixed(1)}</strong>
+                </div>
+                <div>
+                  <span>Delivery</span>
+                  <strong>{selectedShop.deliveryTime}</strong>
+                </div>
+              </div>
+            </section>
+          ) : null}
+
+          <section className={styles.card}>
+            <div className={styles.toolbar}>
+              <div>
+                <h2>Products</h2>
+                <p>Use category filtering and sorting to refine the catalog.</p>
+              </div>
+              <label className={styles.sortBox}>
+                <span>Sort by</span>
+                <select
+                  value={sort}
+                  onChange={(event) => {
+                    setSort(event.target.value as ProductSort);
+                    setPage(1);
+                  }}
                 >
-                  <div>
-                    <p className={styles.selectedLabel}>Selected shop</p>
-                    <h2>
-                      <span className={styles.flag}>{selectedShop.flag}</span>{" "}
-                      {formatShopName(selectedShop.name)}
-                    </h2>
-                    <p className={styles.countryLabel}>{selectedShop.country}</p>
-                    <p>{selectedShop.description}</p>
-                  </div>
-                  <div className={styles.selectedStats}>
-                    <div>
-                      <span>Rating</span>
-                      <strong>{selectedShop.rating.toFixed(1)}</strong>
-                    </div>
-                    <div>
-                      <span>Delivery</span>
-                      <strong>{selectedShop.deliveryTime}</strong>
-                    </div>
-                  </div>
-                </section>
-              ) : null}
-
-              <section className={styles.card}>
-                <div className={styles.toolbar}>
-                  <div>
-                    <h2>Products</h2>
-                    <p>Use category filtering and sorting to refine the catalog.</p>
-                  </div>
-                  <label className={styles.sortBox}>
-                    <span>Sort by</span>
-                    <select
-                      value={sort}
-                      onChange={(event) => {
-                        setSort(event.target.value as ProductSort);
-                        setPage(1);
-                      }}
-                    >
-                      {sortOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-
-                <div className={styles.categoryRow}>
-                  {catalog.categories.map((category: Category) => (
-                    <label key={category.id} className={styles.categoryChip}>
-                      <input
-                        type="checkbox"
-                        checked={selectedCategoryIds.includes(category.id)}
-                        onChange={() => toggleCategory(category.id)}
-                      />
-                      <span>{category.name}</span>
-                    </label>
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
                   ))}
-                </div>
+                </select>
+              </label>
+            </div>
 
-                {feedback ? <p className={styles.feedback}>{feedback}</p> : null}
+            <div className={styles.categoryRow}>
+              {catalog.categories.map((category: Category) => (
+                <label key={category.id} className={styles.categoryChip}>
+                  <input
+                    type="checkbox"
+                    checked={selectedCategoryIds.includes(category.id)}
+                    onChange={() => toggleCategory(category.id)}
+                  />
+                  <span>{category.name}</span>
+                </label>
+              ))}
+            </div>
 
+            {feedback ? <p className={styles.feedback}>{feedback}</p> : null}
+
+            {loading ? (
+              <div className={styles.loaderStage}>
+                <FryingLoader />
+              </div>
+            ) : (
+              <>
                 <div className={styles.productGrid}>
                   {catalog.products.map((product) => (
                     <article key={product.id} className={styles.productCard}>
@@ -324,9 +324,9 @@ export function ShopPageClient({ initialData }: Props) {
                     Next
                   </button>
                 </div>
-              </section>
-            </>
-          )}
+              </>
+            )}
+          </section>
         </div>
       </section>
     </div>

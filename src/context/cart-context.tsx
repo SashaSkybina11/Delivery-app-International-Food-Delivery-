@@ -23,7 +23,7 @@ const CART_KEY = "delivery-app-cart";
 const COUPON_KEY = "delivery-app-coupon";
 const VERSION_KEY = "delivery-app-version";
 const DATA_VERSION = "international-v1";
-const LOADER_DELAY_MS = 2000;
+const LOADER_DELAY_MS = 1400;
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
