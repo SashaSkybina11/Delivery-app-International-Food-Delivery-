@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 import sqlite3 from "sqlite3";
 import { open, type Database } from "sqlite";
@@ -237,6 +238,8 @@ async function initializeDatabase(db: Database) {
 
 export async function getDb() {
   if (!global.__deliveryDbPromise) {
+    fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+
     global.__deliveryDbPromise = open({
       filename: DB_PATH,
       driver: sqlite3.Database,
