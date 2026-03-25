@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { FryingLoader } from "@/components/common/frying-loader";
 import { useCart } from "@/context/cart-context";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { CatalogResponse, Category, ProductSort, RatingRange } from "@/lib/types";
@@ -268,7 +269,11 @@ export function ShopPageClient({ initialData }: Props) {
             </div>
 
             {feedback ? <p className={styles.feedback}>{feedback}</p> : null}
-            {loading ? <p className={styles.muted}>Refreshing products...</p> : null}
+            {loading ? (
+              <div className={styles.loaderWrap}>
+                <FryingLoader />
+              </div>
+            ) : null}
 
             <div className={styles.productGrid}>
               {catalog.products.map((product) => (

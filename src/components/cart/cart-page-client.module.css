@@ -4,6 +4,12 @@
   gap: 1rem;
 }
 
+.loaderWrap {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -238,7 +244,6 @@
   border: 1px dashed rgba(17, 17, 17, 0.15);
 }
 
-.message,
 .error,
 .success,
 .successNote {

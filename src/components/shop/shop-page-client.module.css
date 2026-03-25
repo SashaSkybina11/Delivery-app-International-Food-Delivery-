@@ -310,6 +310,12 @@
   font-weight: 600;
 }
 
+.loaderWrap {
+  padding: 1rem 0 1.25rem;
+  display: grid;
+  place-items: center;
+}
+
 .pagination {
   margin-top: 1.2rem;
   display: flex;

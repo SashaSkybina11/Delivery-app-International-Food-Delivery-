@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
+import { FryingLoader } from "@/components/common/frying-loader";
 import { useCart } from "@/context/cart-context";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { Coupon } from "@/lib/types";
@@ -144,7 +145,11 @@ export function CartPageClient({ coupons }: Props) {
   };
 
   if (!hydrated) {
-    return <p className={styles.message}>Loading cart...</p>;
+    return (
+      <div className={styles.loaderWrap}>
+        <FryingLoader />
+      </div>
+    );
   }
 
   return (
