@@ -42,10 +42,14 @@ export function CartPageClient({ coupons }: Props) {
   const total = Number(Math.max(0, subtotal - discount).toFixed(2));
 
   useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
+
     if (appliedCoupon && subtotal < appliedCoupon.minOrder) {
       clearCoupon();
     }
-  }, [appliedCoupon, clearCoupon, subtotal]);
+  }, [appliedCoupon, clearCoupon, hydrated, subtotal]);
 
   const handleCouponApply = (code: string) => {
     const coupon = coupons.find(

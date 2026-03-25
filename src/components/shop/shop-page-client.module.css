@@ -316,6 +316,12 @@
   place-items: center;
 }
 
+.loaderStage {
+  min-height: 520px;
+  display: grid;
+  place-items: center;
+}
+
 .pagination {
   margin-top: 1.2rem;
   display: flex;

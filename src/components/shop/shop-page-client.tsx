@@ -28,6 +28,8 @@ const sortOptions: Array<{ value: ProductSort; label: string }> = [
   { value: "name-asc", label: "Name: A to Z" },
 ];
 
+const LOADER_DELAY_MS = 2000;
+
 export function ShopPageClient({ initialData }: Props) {
   const { addItem } = useCart();
   const [catalog, setCatalog] = useState(initialData);
@@ -60,7 +62,10 @@ export function ShopPageClient({ initialData }: Props) {
         params.set("categories", selectedCategoryIds.join(","));
       }
 
-      const response = await fetch(`/api/catalog?${params.toString()}`);
+      const [response] = await Promise.all([
+        fetch(`/api/catalog?${params.toString()}`),
+        new Promise((resolve) => window.setTimeout(resolve, LOADER_DELAY_MS)),
+      ]);
       const data = (await response.json()) as CatalogResponse;
 
       if (ignore) {
@@ -163,7 +168,7 @@ export function ShopPageClient({ initialData }: Props) {
                   type="button"
                   className={cn(
                     styles.shopCard,
-                    catalog.selectedShopId === shop.id && styles.shopCardActive,
+                    selectedShopId === shop.id && styles.shopCardActive,
                   )}
                   onClick={() => selectShop(shop.id)}
                 >
@@ -204,121 +209,124 @@ export function ShopPageClient({ initialData }: Props) {
         </aside>
 
         <div className={styles.content}>
-          {selectedShop ? (
-            <section
-              className={styles.selectedShop}
-              style={{ background: shopAccentStyle(selectedShop.accent) }}
-            >
-              <div>
-                <p className={styles.selectedLabel}>Selected shop</p>
-                <h2>
-                  <span className={styles.flag}>{selectedShop.flag}</span>{" "}
-                  {formatShopName(selectedShop.name)}
-                </h2>
-                <p className={styles.countryLabel}>{selectedShop.country}</p>
-                <p>{selectedShop.description}</p>
-              </div>
-              <div className={styles.selectedStats}>
-                <div>
-                  <span>Rating</span>
-                  <strong>{selectedShop.rating.toFixed(1)}</strong>
-                </div>
-                <div>
-                  <span>Delivery</span>
-                  <strong>{selectedShop.deliveryTime}</strong>
-                </div>
-              </div>
-            </section>
-          ) : null}
-
-          <section className={styles.card}>
-            <div className={styles.toolbar}>
-              <div>
-                <h2>Products</h2>
-                <p>Use category filtering and sorting to refine the catalog.</p>
-              </div>
-              <label className={styles.sortBox}>
-                <span>Sort by</span>
-                <select
-                  value={sort}
-                  onChange={(event) => {
-                    setSort(event.target.value as ProductSort);
-                    setPage(1);
-                  }}
+          {loading ? (
+            <div className={styles.loaderStage}>
+              <FryingLoader />
+            </div>
+          ) : (
+            <>
+              {selectedShop ? (
+                <section
+                  className={styles.selectedShop}
+                  style={{ background: shopAccentStyle(selectedShop.accent) }}
                 >
-                  {sortOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <div className={styles.categoryRow}>
-              {catalog.categories.map((category: Category) => (
-                <label key={category.id} className={styles.categoryChip}>
-                  <input
-                    type="checkbox"
-                    checked={selectedCategoryIds.includes(category.id)}
-                    onChange={() => toggleCategory(category.id)}
-                  />
-                  <span>{category.name}</span>
-                </label>
-              ))}
-            </div>
-
-            {feedback ? <p className={styles.feedback}>{feedback}</p> : null}
-            {loading ? (
-              <div className={styles.loaderWrap}>
-                <FryingLoader />
-              </div>
-            ) : null}
-
-            <div className={styles.productGrid}>
-              {catalog.products.map((product) => (
-                <article key={product.id} className={styles.productCard}>
-                  <div className={styles.productTop}>
-                    <span className={styles.productCategory}>{product.categoryName}</span>
-                    <strong>{formatCurrency(product.price)}</strong>
+                  <div>
+                    <p className={styles.selectedLabel}>Selected shop</p>
+                    <h2>
+                      <span className={styles.flag}>{selectedShop.flag}</span>{" "}
+                      {formatShopName(selectedShop.name)}
+                    </h2>
+                    <p className={styles.countryLabel}>{selectedShop.country}</p>
+                    <p>{selectedShop.description}</p>
                   </div>
-                  <h3>{product.name}</h3>
-                  <p>{product.description}</p>
-                  <button type="button" onClick={() => handleAddProduct(product)}>
-                    Add to cart
+                  <div className={styles.selectedStats}>
+                    <div>
+                      <span>Rating</span>
+                      <strong>{selectedShop.rating.toFixed(1)}</strong>
+                    </div>
+                    <div>
+                      <span>Delivery</span>
+                      <strong>{selectedShop.deliveryTime}</strong>
+                    </div>
+                  </div>
+                </section>
+              ) : null}
+
+              <section className={styles.card}>
+                <div className={styles.toolbar}>
+                  <div>
+                    <h2>Products</h2>
+                    <p>Use category filtering and sorting to refine the catalog.</p>
+                  </div>
+                  <label className={styles.sortBox}>
+                    <span>Sort by</span>
+                    <select
+                      value={sort}
+                      onChange={(event) => {
+                        setSort(event.target.value as ProductSort);
+                        setPage(1);
+                      }}
+                    >
+                      {sortOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+
+                <div className={styles.categoryRow}>
+                  {catalog.categories.map((category: Category) => (
+                    <label key={category.id} className={styles.categoryChip}>
+                      <input
+                        type="checkbox"
+                        checked={selectedCategoryIds.includes(category.id)}
+                        onChange={() => toggleCategory(category.id)}
+                      />
+                      <span>{category.name}</span>
+                    </label>
+                  ))}
+                </div>
+
+                {feedback ? <p className={styles.feedback}>{feedback}</p> : null}
+
+                <div className={styles.productGrid}>
+                  {catalog.products.map((product) => (
+                    <article key={product.id} className={styles.productCard}>
+                      <div className={styles.productTop}>
+                        <span className={styles.productCategory}>{product.categoryName}</span>
+                        <strong>{formatCurrency(product.price)}</strong>
+                      </div>
+                      <h3>{product.name}</h3>
+                      <p>{product.description}</p>
+                      <button type="button" onClick={() => handleAddProduct(product)}>
+                        Add to cart
+                      </button>
+                    </article>
+                  ))}
+                </div>
+
+                {catalog.products.length === 0 ? (
+                  <p className={styles.emptyState}>
+                    No products match the current filter selection.
+                  </p>
+                ) : null}
+
+                <div className={styles.pagination}>
+                  <button
+                    type="button"
+                    onClick={() => setPage((current) => Math.max(1, current - 1))}
+                    disabled={catalog.currentPage <= 1}
+                  >
+                    Previous
                   </button>
-                </article>
-              ))}
-            </div>
-
-            {!loading && catalog.products.length === 0 ? (
-              <p className={styles.emptyState}>
-                No products match the current filter selection.
-              </p>
-            ) : null}
-
-            <div className={styles.pagination}>
-              <button
-                type="button"
-                onClick={() => setPage((current) => Math.max(1, current - 1))}
-                disabled={catalog.currentPage <= 1 || loading}
-              >
-                Previous
-              </button>
-              <span>
-                Page {catalog.currentPage} of {catalog.totalPages}
-              </span>
-              <button
-                type="button"
-                onClick={() =>
-                  setPage((current) => Math.min(catalog.totalPages, current + 1))
-                }
-                disabled={catalog.currentPage >= catalog.totalPages || loading}
-              >
-                Next
-              </button>
-            </div>
-          </section>
+                  <span>
+                    Page {catalog.currentPage} of {catalog.totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setPage((current) => Math.min(catalog.totalPages, current + 1))
+                    }
+                    disabled={catalog.currentPage >= catalog.totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              </section>
+            </>
+          )}
         </div>
       </section>
     </div>
