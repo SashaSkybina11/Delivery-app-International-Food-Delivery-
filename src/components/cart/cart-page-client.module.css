@@ -160,7 +160,8 @@
 }
 
 .qtyField {
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
   align-items: center;
   gap: 0.65rem;
   min-width: 0;
@@ -358,20 +359,27 @@
 }
 
 .closeOrderButton {
-  border: none;
+  width: 2.15rem;
+  height: 2.15rem;
+  border: 1px solid rgba(217, 65, 65, 0.32);
+  border-radius: 999px;
   padding: 0;
-  background: transparent;
+  background: #ffffff;
   color: #d94141;
   font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
   transition:
+    background 160ms ease,
     color 160ms ease,
+    border-color 160ms ease,
     transform 160ms ease;
 }
 
 .closeOrderButton:hover {
-  color: #b92f2f;
+  background: #d94141;
+  border-color: #d94141;
+  color: #111111;
   transform: scale(1.04);
 }
 
