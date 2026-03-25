@@ -42,6 +42,7 @@ export function CartPageClient({ coupons }: Props) {
   const [success, setSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showClearCartDialog, setShowClearCartDialog] = useState(false);
+  const [showCancelOrderDialog, setShowCancelOrderDialog] = useState(false);
   const [lastSubmittedOrder, setLastSubmittedOrder] =
     useState<LastSubmittedOrder | null>(null);
 
@@ -239,9 +240,19 @@ export function CartPageClient({ coupons }: Props) {
                   <div className={styles.orderSummaryCard}>
                     <div className={styles.orderSummaryHeader}>
                       <h3>Latest order</h3>
-                      <span className={styles.pendingBadge}>
-                        {lastSubmittedOrder.status}
-                      </span>
+                      <div className={styles.orderSummaryActions}>
+                        <span className={styles.pendingBadge}>
+                          {lastSubmittedOrder.status}
+                        </span>
+                        <button
+                          type="button"
+                          className={styles.closeOrderButton}
+                          aria-label="Cancel latest order"
+                          onClick={() => setShowCancelOrderDialog(true)}
+                        >
+                          ×
+                        </button>
+                      </div>
                     </div>
                     <div className={styles.orderSummaryGrid}>
                       <div>
@@ -276,7 +287,7 @@ export function CartPageClient({ coupons }: Props) {
                       </p>
                     </div>
                     <div className={styles.itemActions}>
-                      <label>
+                      <label className={styles.qtyField}>
                         Qty
                         <input
                           type="number"
@@ -464,6 +475,46 @@ export function CartPageClient({ coupons }: Props) {
                 onClick={() => {
                   clearCart();
                   setShowClearCartDialog(false);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+      {showCancelOrderDialog ? (
+        <div
+          className={styles.dialogBackdrop}
+          role="presentation"
+          onClick={() => setShowCancelOrderDialog(false)}
+        >
+          <div
+            className={styles.dialog}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cancel-order-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3 id="cancel-order-title">Cancel this order?</h3>
+            <p>Are you sure you want to cancel this order?</p>
+            <div className={styles.dialogActions}>
+              <button
+                type="button"
+                className={styles.cancelButton}
+                onClick={() => setShowCancelOrderDialog(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className={styles.confirmButton}
+                onClick={() => {
+                  setLastSubmittedOrder(null);
+                  if (typeof window !== "undefined") {
+                    window.localStorage.removeItem("foodapp:last-order");
+                  }
+                  setShowCancelOrderDialog(false);
                 }}
               >
                 Delete
