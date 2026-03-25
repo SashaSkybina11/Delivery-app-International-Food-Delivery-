@@ -53,8 +53,11 @@ strong {
 button,
 input,
 select,
-textarea {
+textarea,
+option {
   font: inherit;
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
 }
 
 a {

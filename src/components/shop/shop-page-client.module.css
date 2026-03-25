@@ -352,6 +352,27 @@
     border-radius: 22px;
   }
 
+  .selectedShop {
+    text-align: center;
+    align-items: center;
+  }
+
+  .selectedShop p,
+  .selectedLabel,
+  .countryLabel {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .selectedStats {
+    width: 100%;
+    justify-items: center;
+  }
+
+  .selectedStats div {
+    width: min(260px, 100%);
+  }
+
   .toolbar,
   .pagination {
     flex-direction: column;

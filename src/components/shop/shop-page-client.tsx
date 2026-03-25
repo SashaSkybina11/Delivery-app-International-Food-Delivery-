@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { FryingLoader } from "@/components/common/frying-loader";
 import { useCart } from "@/context/cart-context";
@@ -32,6 +32,7 @@ const LOADER_DELAY_MS = 1400;
 
 export function ShopPageClient({ initialData }: Props) {
   const { addItem } = useCart();
+  const productsSectionRef = useRef<HTMLElement | null>(null);
   const [catalog, setCatalog] = useState(initialData);
   const [selectedShopId, setSelectedShopId] = useState<number | null>(
     initialData.selectedShopId,
@@ -113,6 +114,15 @@ export function ShopPageClient({ initialData }: Props) {
     setSelectedShopId(shopId);
     setSelectedCategoryIds([]);
     setPage(1);
+
+    window.setTimeout(() => {
+      if (window.innerWidth <= 1080) {
+        productsSectionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 80);
   };
 
   const handleAddProduct = (product: CatalogResponse["products"][number]) => {
@@ -236,7 +246,7 @@ export function ShopPageClient({ initialData }: Props) {
             </section>
           ) : null}
 
-          <section className={styles.card}>
+          <section ref={productsSectionRef} className={styles.card}>
             <div className={styles.toolbar}>
               <div>
                 <h2>Products</h2>
