@@ -135,10 +135,12 @@
 .shopTitleRow h3 {
   margin: 0;
   font-size: 1.05rem;
+  color: #111111;
 }
 
 .shopTitleRow span {
   font-weight: 700;
+  color: #111111;
 }
 
 .shopMeta p {
