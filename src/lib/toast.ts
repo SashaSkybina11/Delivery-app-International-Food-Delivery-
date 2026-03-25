@@ -1,5 +1,5 @@
 const baseOptions = {
-  position: "topRight" as const,
+  position: "topCenter" as const,
   timeout: 3200,
   maxWidth: 420,
 };
